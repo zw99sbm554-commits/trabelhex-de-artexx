@@ -1,0 +1,278 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route("/trabalho-de-artes")
+def home():
+    return """
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trabalho de Artes - História do Rock</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+    background:#111;
+}
+
+section{
+    height:100vh;
+    scroll-snap-align:start;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    position:relative;
+    padding:40px;
+    color:white;
+    background:#161616;
+    overflow:hidden;
+}
+
+/* Marca d'água de Estrela no fundo */
+section::before{
+    content:"";
+    position:absolute;
+    width: 450px;
+    height: 450px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/></svg>') no-repeat center;
+    opacity:0.04;
+    z-index:0;
+}
+
+.s2::before, .s4::before {
+    transform: rotate(180deg);
+    opacity:0.03;
+}
+
+.conteudo{
+    max-width:900px;
+    background:rgba(0,0,0,0.85);
+    padding:40px;
+    border-radius:15px;
+    position:relative;
+    z-index:2;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow:0 0 30px rgba(0,0,0,0.7);
+}
+
+/* Guitarras Laterais */
+.guitarra-esq,
+.guitarra-dir{
+    position:absolute;
+    width: 180px;
+    height: 180px;
+    opacity:0.15;
+    z-index:1;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://w3.org" viewBox="0 0 100 100" fill="white"><path d="M10,50 L50,15 L90,50 L50,85 Z M50,15 L50,85 M35,35 L65,65 M35,65 L65,35"/></svg>') no-repeat center;
+    background-size: contain;
+    transition: opacity 0.3s ease;
+}
+
+.guitarra-esq{
+    left:40px;
+    transform: rotate(-45deg);
+}
+
+.guitarra-dir{
+    right:40px;
+    transform: rotate(45deg);
+}
+
+section:hover .guitarra-esq,
+section:hover .guitarra-dir {
+    opacity: 0.35;
+}
+
+h1{
+    margin-bottom:20px;
+    font-size:2.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #e63946;
+}
+
+p{
+    font-size:1.35rem;
+    line-height:1.8;
+    color: #ddd;
+}
+
+.s1{background:#1a1a1a;}
+.s2{background:#222222;}
+.s3{background:#1a1a1a;}
+.s4{background:#222222;}
+.s5{background:#1a1a1a;}
+
+/* Estilo do Player de Música Flutuante */
+.audio-control {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 100;
+    background: #e63946;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.audio-control:hover {
+    transform: scale(1.05);
+    background: #cf2e3b;
+}
+
+#youtube-player {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+</style>
+
+</head>
+<body>
+
+<!-- Player do YouTube Oculto (Música: Instrumental Hard Rock Clássico) -->
+<iframe id="youtube-player" 
+        src="https://youtube.com" 
+        allow="autoplay">
+</iframe>
+
+<!-- Botão de Controle de Som -->
+<button class="audio-control" id="play-btn" onclick="toggleMusic()">
+    <span>🎵</span> LIGAR ROCK
+</button>
+
+<section class="s1">
+    <div class="guitarra-esq"></div>
+    <div class="conteudo">
+        <h1>1. Surgimento do Rock</h1>
+        <p>
+        O rock surgiu nos Estados Unidos durante a década de 1950.
+        Ele nasceu da mistura de estilos musicais como blues,
+        country, gospel e rhythm and blues. Seu ritmo animado e
+        sua forte presença da guitarra conquistaram rapidamente
+        os jovens da época, tornando-se uma das maiores revoluções
+        da história da música.
+        </p>
+    </div>
+    <div class="guitarra-dir"></div>
+</section>
+
+<section class="s2">
+    <div class="guitarra-esq"></div>
+    <div class="conteudo">
+        <h1>2. Primeiros Sucessos</h1>
+        <p>
+        Uma das músicas mais importantes para a popularização
+        do rock foi "Rock Around the Clock". O sucesso foi tão
+        grande que ajudou o gênero a ganhar espaço nas rádios,
+        na televisão e em diversos países. A partir desse momento,
+        o rock começou a se transformar em um fenômeno mundial.
+        </p>
+    </div>
+    <div class="guitarra-dir"></div>
+</section>
+
+<section class="s3">
+    <div class="guitarra-esq"></div>
+    <div class="conteudo">
+        <h1>3. Elvis Presley</h1>
+        <p>
+        Elvis Presley ficou conhecido como o Rei do Rock.
+        Seu estilo inovador, sua voz marcante e suas apresentações
+        cheias de energia fizeram dele um dos artistas mais famosos
+        da história da música. Sua influência ajudou o rock a atingir
+        milhões de pessoas ao redor do mundo.
+        </p>
+    </div>
+    <div class="guitarra-dir"></div>
+</section>
+
+<section class="s4">
+    <div class="guitarra-esq"></div>
+    <div class="conteudo">
+        <h1>4. Expansão Mundial</h1>
+        <p>
+        Nas décadas de 1960 e 1970 o rock se espalhou pelo mundo.
+        Novas bandas e estilos surgiram, como hard rock, rock
+        progressivo e punk rock. O gênero passou a influenciar
+        não apenas a música, mas também a moda, a cultura e o
+        comportamento de várias gerações.
+        </p>
+    </div>
+    <div class="guitarra-dir"></div>
+</section>
+
+<section class="s5">
+    <div class="guitarra-esq"></div>
+    <div class="conteudo">
+        <h1>5. Legado do Rock</h1>
+        <p>
+        Mesmo após mais de 70 anos de história, o rock continua
+        sendo um dos gêneros musicais mais importantes do mundo.
+        Sua influência pode ser percebida em diversos artistas modernos,
+        provando que sua atitude, rebeldia e paixão continuam vivas
+        no coração de novas gerações de músicos e fãs.
+        </p>
+    </div>
+    <div class="guitarra-dir"></div>
+</section>
+
+<script>
+// API do YouTube para controlar o player via botão externo
+var player;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player');
+}
+
+// Carrega a API do YouTube
+var tag = document.createElement('script');
+tag.src = "https://youtube.com";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+var playing = false;
+function toggleMusic() {
+    var btn = document.getElementById('play-btn');
+    if (!playing) {
+        player.playVideo();
+        btn.innerHTML = "<span>⏸️</span> PAUSAR ROCK";
+        playing = true;
+    } else {
+        player.pauseVideo();
+        btn.innerHTML = "<span>🎵</span> LIGAR ROCK";
+        playing = false;
+    }
+}
+</script>
+
+</body>
+</html>
+"""
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
